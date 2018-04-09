@@ -1,6 +1,8 @@
 package project.models;
 
-public class HistoCrypto {
+import javax.persistence.*;
+
+public class HistoMinute {
 
     int id;
     String fromCurrency;
@@ -10,6 +12,8 @@ public class HistoCrypto {
     double high;
     double low;
     double close;
+    double volumeFrom;
+    double volumeTo;
 
     public int getId() {
         return id;
@@ -73,5 +77,21 @@ public class HistoCrypto {
 
     public void setClose(double close) {
         this.close = close;
+    }
+
+    public double getVolumeFrom() {
+        return volumeFrom;
+    }
+
+    public void setVolumeFrom(double volumeFrom) {
+        this.volumeFrom = volumeFrom;
+    }
+
+    public double getVolumeTo() {
+        return volumeTo;
+    }
+
+    public void setVolumeTo(double volumeTo) {
+        this.volumeTo = volumeTo;
     }
 }

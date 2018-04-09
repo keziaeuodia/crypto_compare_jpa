@@ -3,8 +3,10 @@ package project.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import project.models.CryptoRoot;
-import project.models.HistoCrypto;
+import project.models.HistoMinute;
 import project.services.CryptoService;
+
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/data")
@@ -24,37 +26,37 @@ public class CryptoController {
 
     //get crypto data by "from" currency
     @RequestMapping(method= RequestMethod.GET, value = "/fsym")
-    public HistoCrypto[] findByFsym(@RequestParam(value = "fsym", required = true) String fsym){
+    public ArrayList<HistoMinute> findByFsym(@RequestParam(value = "fsym", required = true) String fsym){
         return cryptoService.getDataByFsym(fsym);
     }
 
     //get crypto data by "to" currency
     @RequestMapping(method= RequestMethod.GET, value = "/tsym")
-    public HistoCrypto[] findByTsym(@RequestParam(value = "tsym", required = true) String tsym){
+    public ArrayList<HistoMinute> findByTsym(@RequestParam(value = "tsym", required = true) String tsym){
         return cryptoService.getDataByTsym(tsym);
     }
 
     //get crypto data by "id"
     @GetMapping("/{id}")
-    public HistoCrypto getDataById(@PathVariable(value = "id") int id){
+    public HistoMinute getDataById(@PathVariable(value = "id") int id){
         return cryptoService.getDataById(id);
     }
 
     //get all crypto data from the database
     @GetMapping("/")
-    public HistoCrypto[] findAll(){
+    public ArrayList<HistoMinute> findAll(){
         return cryptoService.getAllData();
     }
 
     //post new crypto data to DB
     @PostMapping("/")
-    public String add(@RequestBody HistoCrypto data){
+    public String add(@RequestBody HistoMinute data){
         return cryptoService.addData(data);
     }
 
     //edit data in DB by ID
     @PatchMapping("/")
-    public HistoCrypto update(@RequestBody HistoCrypto data) {
+    public HistoMinute update(@RequestBody HistoMinute data) {
         return cryptoService.update(data);
     }
 

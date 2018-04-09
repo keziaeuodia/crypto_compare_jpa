@@ -1,7 +1,9 @@
 package project.mappers;
 
-import crypto.models.HistoCrypto;
 import org.apache.ibatis.annotations.*;
+import project.models.HistoMinute;
+
+import java.util.ArrayList;
 
 @Mapper
 public interface CryptoMapper {
@@ -18,25 +20,25 @@ public interface CryptoMapper {
             "WHERE `id` = #{id};";
 
     @Insert(INSERT_DATA)
-    public void saveCryptoData(HistoCrypto obj);
+    public void saveCryptoData(HistoMinute obj);
 
     @Select(GET_ALL_DATA)
-    public HistoCrypto[] getAllData();
+    public ArrayList<HistoMinute> getAllData();
 
     @Select(GET_DATA_BY_FSYM)
-    public HistoCrypto[] getDataByFsym(String fsym);
+    public ArrayList<HistoMinute> getDataByFsym(String fsym);
 
     @Select(GET_DATA_BY_TSYM)
-    public HistoCrypto[] getDataByTsym(String tsym);
+    public ArrayList<HistoMinute> getDataByTsym(String tsym);
 
     @Select(GET_DATA_BY_ID)
-    HistoCrypto getDataById(int id);
+    HistoMinute getDataById(int id);
 
     @Delete(DELETE_DATA_BY_ID)
     public void deleteDataById(int id);
 
     @Update(UPDATE_DATA_BY_ID)
-    public int update(HistoCrypto histoCrypto);
+    public int update(HistoMinute histoMinute);
 
 
 }

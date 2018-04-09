@@ -1,5 +1,7 @@
 package project.models;
 
+import java.util.Date;
+
 public class Data {
 
     long time;
@@ -65,4 +67,10 @@ public class Data {
     public void setVolumeto(double volumeto) {
         this.volumeto = volumeto;
     }
+
+    public Date timeConversion(long timemillis){
+        Date date = new Date(timemillis);
+        return date;
+    }
+
 }

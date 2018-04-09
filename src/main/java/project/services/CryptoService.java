@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import project.mappers.CryptoMapper;
 import project.models.CryptoRoot;
-import project.models.HistoCrypto;
+import project.models.HistoMinute;
+
+import java.util.ArrayList;
 
 @Service
 public class CryptoService {
@@ -23,30 +25,14 @@ public class CryptoService {
         CryptoRoot data = restTemplate.getForObject(fquery, CryptoRoot.class);
 
         if (persist){
-            saveCryptoData(data, fsym, tsym);
+            saveAllDataPerMinute(data, fsym, tsym);
         }
         return data;
     }
 
-    private void saveCryptoData(CryptoRoot data, String fsym, String tsym) {
-
-        HistoCrypto obj = new HistoCrypto();
-
-        obj.setFromCurrency(fsym);
-        obj.setToCurrency(tsym);
-        obj.setTime(data.getData()[0].getTime());
-        obj.setOpen(data.getData()[0].getOpen());
-        obj.setHigh(data.getData()[0].getHigh());
-        obj.setLow(data.getData()[0].getLow());
-        obj.setClose(data.getData()[0].getClose());
-
-        cryptoMapper.saveCryptoData(obj);
-
-    }
-
     private void saveAllDataPerMinute(CryptoRoot data, String fsym, String tsym){
 
-        HistoCrypto obj = new HistoCrypto();
+        HistoMinute obj = new HistoMinute();
 
         for(int i = 0; i < data.getData().length; i++) {
             obj.setFromCurrency(fsym);
@@ -61,19 +47,19 @@ public class CryptoService {
         }
     }
 
-    public HistoCrypto[] getAllData(){
+    public ArrayList<HistoMinute> getAllData(){
         return cryptoMapper.getAllData();
     }
 
-    public HistoCrypto[] getDataByFsym(String fsym){
+    public ArrayList<HistoMinute> getDataByFsym(String fsym){
         return cryptoMapper.getDataByFsym(fsym);
     }
 
-    public HistoCrypto[] getDataByTsym(String tsym) {
+    public ArrayList<HistoMinute> getDataByTsym(String tsym) {
         return cryptoMapper.getDataByTsym(tsym);
     }
 
-    public String addData(HistoCrypto data) {
+    public String addData(HistoMinute data) {
         cryptoMapper.saveCryptoData(data);
         return "Data inserted";
     }
@@ -83,12 +69,12 @@ public class CryptoService {
         return "Data id: " + id + " deleted.";
     }
 
-    public HistoCrypto update(HistoCrypto data) {
+    public HistoMinute update(HistoMinute data) {
         cryptoMapper.update(data);
         return cryptoMapper.getDataById(data.getId());
     }
 
-    public HistoCrypto getDataById(int id) {
+    public HistoMinute getDataById(int id) {
         return cryptoMapper.getDataById(id);
     }
 
