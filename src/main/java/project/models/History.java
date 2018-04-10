@@ -1,19 +1,17 @@
 package project.models;
 
-import javax.persistence.*;
-
-public class HistoMinute {
+public class History {
 
     int id;
     String fromCurrency;
     String toCurrency;
     long time;
-    double open;
+    double close;
     double high;
     double low;
-    double close;
-    double volumeFrom;
-    double volumeTo;
+    double open;
+    double volumefrom;
+    double volumeto;
 
     public int getId() {
         return id;
@@ -47,12 +45,12 @@ public class HistoMinute {
         this.time = time;
     }
 
-    public double getOpen() {
-        return open;
+    public double getClose() {
+        return close;
     }
 
-    public void setOpen(double open) {
-        this.open = open;
+    public void setClose(double close) {
+        this.close = close;
     }
 
     public double getHigh() {
@@ -71,27 +69,27 @@ public class HistoMinute {
         this.low = low;
     }
 
-    public double getClose() {
-        return close;
+    public double getOpen() {
+        return open;
     }
 
-    public void setClose(double close) {
-        this.close = close;
+    public void setOpen(double open) {
+        this.open = open;
     }
 
-    public double getVolumeFrom() {
-        return volumeFrom;
+    public double getVolumefrom() {
+        return volumefrom;
     }
 
-    public void setVolumeFrom(double volumeFrom) {
-        this.volumeFrom = volumeFrom;
+    public void setVolumefrom(double volumefrom) {
+        this.volumefrom = volumefrom;
     }
 
-    public double getVolumeTo() {
-        return volumeTo;
+    public double getVolumeto() {
+        return volumeto;
     }
 
-    public void setVolumeTo(double volumeTo) {
-        this.volumeTo = volumeTo;
+    public void setVolumeto(double volumeto) {
+        this.volumeto = volumeto;
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import project.mappers.CryptoMapper;
 import project.models.CryptoRoot;
-import project.models.HistoMinute;
+import project.models.History;
 
 import java.util.ArrayList;
 
@@ -30,36 +30,68 @@ public class CryptoService {
         return data;
     }
 
+    private void saveCryptoData(CryptoRoot data, String fsym, String tsym) {
+
+        History obj = new History();
+
+        obj.setFromCurrency(fsym);
+        obj.setToCurrency(tsym);
+        obj.setTime(data.getData()[0].getTime());
+        obj.setClose(data.getData()[0].getClose());
+        obj.setHigh(data.getData()[0].getHigh());
+        obj.setLow(data.getData()[0].getLow());
+        obj.setOpen(data.getData()[0].getOpen());
+        obj.setVolumefrom(data.getData()[0].getVolumefrom());
+        obj.setVolumeto(data.getData()[0].getVolumeto());
+
+        cryptoMapper.saveCryptoData(obj);
+
+    }
+
+
     private void saveAllDataPerMinute(CryptoRoot data, String fsym, String tsym){
 
-        HistoMinute obj = new HistoMinute();
+        History obj = new History();
 
+        //loop through the data object and set it to DB
         for(int i = 0; i < data.getData().length; i++) {
-            obj.setFromCurrency(fsym);
-            obj.setToCurrency(tsym);
-            obj.setTime(data.getData()[i].getTime());
-            obj.setOpen(data.getData()[i].getOpen());
-            obj.setHigh(data.getData()[i].getHigh());
-            obj.setLow(data.getData()[i].getLow());
-            obj.setClose(data.getData()[i].getClose());
 
-            cryptoMapper.saveCryptoData(obj);
+                obj.setFromCurrency(fsym);
+                obj.setToCurrency(tsym);
+                obj.setTime(data.getData()[i].getTime());
+                obj.setClose(data.getData()[i].getClose());
+                obj.setHigh(data.getData()[i].getHigh());
+                obj.setLow(data.getData()[i].getLow());
+                obj.setOpen(data.getData()[i].getOpen());
+                obj.setVolumefrom(data.getData()[i].getVolumefrom());
+                obj.setVolumeto(data.getData()[i].getVolumeto());
+
+            if (checkDuplicate(obj) == false)
+                cryptoMapper.saveCryptoData(obj);
         }
     }
 
-    public ArrayList<HistoMinute> getAllData(){
+    //checking if there is any duplicate time in the data, if there's no duplicate time, persist data
+    private boolean checkDuplicate (History obj){
+        History history = cryptoMapper.getUniqueData(obj.getFromCurrency(), obj.getToCurrency(), obj.getTime());
+        if (history == null) {
+            return false;
+        }else return true;
+    }
+
+    public ArrayList<History> getAllData(){
         return cryptoMapper.getAllData();
     }
 
-    public ArrayList<HistoMinute> getDataByFsym(String fsym){
+    public ArrayList<History> getDataByFsym(String fsym){
         return cryptoMapper.getDataByFsym(fsym);
     }
 
-    public ArrayList<HistoMinute> getDataByTsym(String tsym) {
+    public ArrayList<History> getDataByTsym(String tsym) {
         return cryptoMapper.getDataByTsym(tsym);
     }
 
-    public String addData(HistoMinute data) {
+    public String addData(History data) {
         cryptoMapper.saveCryptoData(data);
         return "Data inserted";
     }
@@ -69,12 +101,12 @@ public class CryptoService {
         return "Data id: " + id + " deleted.";
     }
 
-    public HistoMinute update(HistoMinute data) {
+    public History update(History data) {
         cryptoMapper.update(data);
         return cryptoMapper.getDataById(data.getId());
     }
 
-    public HistoMinute getDataById(int id) {
+    public History getDataById(int id) {
         return cryptoMapper.getDataById(id);
     }
 
