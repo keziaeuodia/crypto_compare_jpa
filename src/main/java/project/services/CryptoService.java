@@ -22,14 +22,17 @@ public class CryptoService {
     public CryptoRoot search(String fsym, String tsym, boolean persist) {
         String fquery = "https://min-api.cryptocompare.com/data/histominute?fsym="+fsym+"&tsym="+tsym;
 
+        //mapping the data to the class
         CryptoRoot data = restTemplate.getForObject(fquery, CryptoRoot.class);
 
+        //persisting data to DB
         if (persist){
             saveAllDataPerMinute(data, fsym, tsym);
         }
         return data;
     }
 
+    //saving one history data (at the index of 0) into the DB
     private void saveCryptoData(CryptoRoot data, String fsym, String tsym) {
 
         History obj = new History();
@@ -48,7 +51,7 @@ public class CryptoService {
 
     }
 
-
+    //saving the history data to DB
     private void saveAllDataPerMinute(CryptoRoot data, String fsym, String tsym){
 
         History obj = new History();
@@ -56,22 +59,24 @@ public class CryptoService {
         //loop through the data object and set it to DB
         for(int i = 0; i < data.getData().length; i++) {
 
-                obj.setFromCurrency(fsym);
-                obj.setToCurrency(tsym);
-                obj.setTime(data.getData()[i].getTime());
-                obj.setClose(data.getData()[i].getClose());
-                obj.setHigh(data.getData()[i].getHigh());
-                obj.setLow(data.getData()[i].getLow());
-                obj.setOpen(data.getData()[i].getOpen());
-                obj.setVolumefrom(data.getData()[i].getVolumefrom());
-                obj.setVolumeto(data.getData()[i].getVolumeto());
+            obj.setFromCurrency(fsym);
+            obj.setToCurrency(tsym);
+            obj.setTime(data.getData()[i].getTime());
+            obj.setClose(data.getData()[i].getClose());
+            obj.setHigh(data.getData()[i].getHigh());
+            obj.setLow(data.getData()[i].getLow());
+            obj.setOpen(data.getData()[i].getOpen());
+            obj.setVolumefrom(data.getData()[i].getVolumefrom());
+            obj.setVolumeto(data.getData()[i].getVolumeto());
 
+            //calling the method that checks duplicate
             if (checkDuplicate(obj) == false)
+                //write data to DB if there's no duplicate
                 cryptoMapper.saveCryptoData(obj);
         }
     }
 
-    //checking if there is any duplicate time in the data, if there's no duplicate time, persist data
+    //checking if there is any duplicate time in the data based on fromCurrency, toCurrency, and time
     private boolean checkDuplicate (History obj){
         History history = cryptoMapper.getUniqueData(obj.getFromCurrency(), obj.getToCurrency(), obj.getTime());
         if (history == null) {
