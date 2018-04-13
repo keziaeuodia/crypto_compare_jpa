@@ -8,6 +8,9 @@ import java.util.ArrayList;
 @Mapper
 public interface CryptoMapper {
 
+    /**
+     * MyBatis Minute Data Mapper
+     */
     String INSERT_DATA = "INSERT INTO `crypto-project`.`histoMinute`(`id`,`fromCurrency`,`toCurrency`,`time`,`close`,`open`,`high`,`low`,`volumefrom`,`volumeto`)"+
             " VALUES (#{id},#{fromCurrency},#{toCurrency},#{time},#{close},#{open},#{high},#{low},#{volumefrom},#{volumeto});";
     String GET_ALL_DATA = "SELECT * FROM `crypto-project`.`histoMinute`;";
@@ -45,4 +48,21 @@ public interface CryptoMapper {
     @Update(UPDATE_DATA_BY_ID)
     public int update(History history);
 
-}
+
+    /**
+     * MyBatis Hour Data Mapper
+     */
+    String INSERT_HOUR_DATA = "INSERT INTO `crypto-project`.`histoHour`(`id`,`fromCurrency`,`toCurrency`,`time`,`close`,`open`,`high`,`low`,`volumefrom`,`volumeto`)"+
+            " VALUES (#{id},#{fromCurrency},#{toCurrency},#{time},#{close},#{open},#{high},#{low},#{volumefrom},#{volumeto});";
+    String GET_ALL_HOUR_DATA = "SELECT * FROM `crypto-project`.`histoHour`;";
+    String GET_HOUR_DATA_BY_FSYM = "SELECT * FROM `crypto-project`.`histoHour` WHERE `fromCurrency` = #{fromCurrency};";
+    String GET_HOUR_DATA_BY_TSYM = "SELECT * FROM `crypto-project`.`histoHour` WHERE `toCurrency` = #{toCurrency};";
+    String GET_HOUR_DATA_BY_ID = "SELECT * FROM `crypto-project`.`histoHour` WHERE `id` = #{id};";
+    String DELETE_HOUR_DATA_BY_ID = "DELETE FROM `crypto-project`.`histoHour` WHERE `id` = #{id};";
+    String UPDATE_HOUR_DATA_BY_ID = "UPDATE `crypto-project`.`histoHour`SET`id` = #{id},`fromCurrency` = #{fromCurrency}," +
+            "`toCurrency` = #{toCurrency},`time` = #{time},`close` = #{close},`open` = #{open},`high` = #{high}," +
+            "`low` = #{low},`volumeFrom` = #{volumeFrom},`volumeTo` = #{volumeTo}WHERE `id` = #{id};";
+    String GET_HOUR_UNIQUE_DATA = "SELECT * FROM `crypto-project`.`histoHour` " +
+            "WHERE `fromCurrency` = #{arg0} AND `toCurrency` = #{arg1} AND `time` = #{arg2};";
+
+    }
