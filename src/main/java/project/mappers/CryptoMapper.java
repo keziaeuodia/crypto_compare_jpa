@@ -65,4 +65,29 @@ public interface CryptoMapper {
     String GET_HOUR_UNIQUE_DATA = "SELECT * FROM `crypto-project`.`histoHour` " +
             "WHERE `fromCurrency` = #{arg0} AND `toCurrency` = #{arg1} AND `time` = #{arg2};";
 
-    }
+    @Insert(INSERT_HOUR_DATA)
+    public void saveHourData(History obj);
+
+    @Select(GET_ALL_HOUR_DATA)
+    public ArrayList<History> getAllHourData();
+
+    @Select(GET_HOUR_DATA_BY_FSYM)
+    public ArrayList<History> getHourDataByFsym(String fsym);
+
+    @Select(GET_HOUR_DATA_BY_TSYM)
+    public ArrayList<History> getHourDataByTsym(String tsym);
+
+    @Select(GET_HOUR_UNIQUE_DATA)
+    public History getHourUniqueData(String fsym, String tsym, long time);
+
+    @Select(GET_HOUR_DATA_BY_ID)
+    History getHourDataById(int id);
+
+    @Delete(DELETE_HOUR_DATA_BY_ID)
+    public void deleteHourDataById(int id);
+
+    @Update(UPDATE_HOUR_DATA_BY_ID)
+    public int updateHourData(History history);
+
+
+}
